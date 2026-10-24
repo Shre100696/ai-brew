@@ -1,0 +1,14 @@
+# Feeds by newsletter section. Verified Oct 24, 2026.
+feeds:
+  - name: TechCrunch
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    section: news
+  - name: Ars Technica
+    url: https://arstechnica.com/ai/feed/
+    section: news
+  - name: The Verge
+    url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+    section: news
+  - name: MIT Technology Review
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+    section: news
