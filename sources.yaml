@@ -12,3 +12,14 @@ feeds:
   - name: MIT Technology Review
     url: https://www.technologyreview.com/topic/artificial-intelligence/feed
     section: news
+  - name: AWS Machine Learning Blog
+    url: https://aws.amazon.com/blogs/machine-learning/feed/
+    section: work
+  - name: CIO.com
+    url: https://www.cio.com/feed/
+    section: work
+    ai_filter: true
+  - name: Salesforce News
+    url: https://www.salesforce.com/news/feed/
+    section: work
+    ai_filter: true
