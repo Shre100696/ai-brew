@@ -39,6 +39,17 @@ def mentions_ai(item: dict) -> bool:
     return bool(AI_PATTERN.search(text))
 
 
+UPCOMING_PATTERN = re.compile(
+    r"\b(upcoming|coming soon|coming (?:next|this|later)|will (?:launch|release|roll out|ship|debut|arrive)"
+    r"|preview|beta|waitlist|conference|summit|keynote|later this (?:week|month|year)|next (?:week|month))\b",
+    re.IGNORECASE,
+)
+DATE_PATTERN = re.compile(
+    r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?"
+    r"|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.? \d{1,2}(?:, \d{4})?\b"
+)
+
+
 def fetch_feed(url: str, name: str) -> list[dict]:
     """Download one RSS feed and return its items as clean dicts."""
     response = httpx.get(url, timeout=10, follow_redirects=True)
@@ -123,6 +134,35 @@ def get_company_ai_updates(days: int = 3, company: str | None = None, limit: int
         name = company.lower()
         stories = [s for s in stories if name in (s["title"] + " " + s["summary"]).lower()]
     return {"stories": stories[:limit], "failed_feeds": failed_feeds}
+
+
+@mcp.tool()
+def get_upcoming(days: int = 7, limit: int = 10) -> dict:
+    """Find recent AI stories that announce something still to come:
+    launches, betas, waitlists, previews, conferences, and summits.
+
+    Use this for the "Coming up" section. date_mentioned is a date copied
+    from the source text, or null if the source does not state one.
+    Never guess a date when it is null.
+
+    Args:
+        days: How many days back to search recent stories (1-14).
+        limit: Max number of items to return (1-30).
+    """
+    days = max(1, min(days, 14))
+    limit = max(1, min(limit, 30))
+    news, news_failed = collect_stories("news", days)
+    work, work_failed = collect_stories("work", days)
+
+    upcoming = []
+    for story in news + work:
+        text = f"{story['title']} {story['summary']}"
+        if UPCOMING_PATTERN.search(text):
+            date = DATE_PATTERN.search(text)
+            story["date_mentioned"] = date.group(0) if date else None
+            upcoming.append(story)
+
+    return {"items": upcoming[:limit], "failed_feeds": news_failed + work_failed}
 
 
 if __name__ == "__main__":
