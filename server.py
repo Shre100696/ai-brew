@@ -49,6 +49,36 @@ DATE_PATTERN = re.compile(
     r"|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.? \d{1,2}(?:, \d{4})?\b"
 )
 
+STOP_WORDS = {
+    "the", "a", "an", "and", "or", "of", "to", "in", "on", "for", "with", "its", "is",
+    "at", "by", "from", "as", "that", "this", "it", "new", "says", "after", "how",
+    "why", "what", "your", "you", "are", "be", "will", "can", "now",
+}
+SAME_STORY_THRESHOLD = 0.3  # tuned on real headlines, Oct 24 2026
+
+
+def headline_words(title: str) -> set[str]:
+    """Meaningful lowercase words in a headline, without stop words."""
+    words = re.findall(r"[a-z0-9]+", title.lower())
+    return {w for w in words if w not in STOP_WORDS and len(w) > 1}
+
+
+def is_same_story(title_a: str, title_b: str) -> bool:
+    """True if two headlines share enough words to be the same news."""
+    a, b = headline_words(title_a), headline_words(title_b)
+    if not a or not b:
+        return False
+    return len(a & b) / len(a | b) >= SAME_STORY_THRESHOLD
+
+
+def dedupe(stories: list[dict]) -> list[dict]:
+    """Keep the first story of each group of duplicates (input is newest first)."""
+    kept: list[dict] = []
+    for story in stories:
+        if not any(is_same_story(story["title"], k["title"]) for k in kept):
+            kept.append(story)
+    return kept
+
 
 def fetch_feed(url: str, name: str) -> list[dict]:
     """Download one RSS feed and return its items as clean dicts."""
@@ -92,7 +122,7 @@ def collect_stories(section: str, days: int) -> tuple[list[dict], list[str]]:
     stories.sort(key=lambda s: s["published"], reverse=True)
     for story in stories:
         story["published"] = story["published"].isoformat()
-    return stories, failed_feeds
+    return dedupe(stories), failed_feeds
 
 
 @mcp.tool()
