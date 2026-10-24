@@ -1,3 +1,4 @@
+import html
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -80,6 +81,17 @@ def dedupe(stories: list[dict]) -> list[dict]:
     return kept
 
 
+MAX_SUMMARY_CHARS = 500  # we only ever use a short summary, never the full article
+
+
+def clean_text(raw: str) -> str:
+    """Strip HTML tags, entities, and WordPress 'The post ... appeared first' footers."""
+    text = html.unescape(re.sub(r"<[^>]+>", " ", raw))
+    text = re.sub(r"\s*The post .* appeared first on .*$", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:MAX_SUMMARY_CHARS]
+
+
 def fetch_feed(url: str, name: str) -> list[dict]:
     """Download one RSS feed and return its items as clean dicts."""
     response = httpx.get(url, timeout=10, follow_redirects=True)
@@ -92,11 +104,11 @@ def fetch_feed(url: str, name: str) -> list[dict]:
             continue  # no date means we can't tell if it's recent
         published = datetime(*entry.published_parsed[:6], tzinfo=timezone.utc)
         item = {
-            "title": entry.get("title", ""),
+            "title": clean_text(entry.get("title", "")),
             "link": entry.get("link", ""),
             "source": name,
             "published": published,
-            "summary": entry.get("summary", ""),
+            "summary": clean_text(entry.get("summary", "")),
             "categories": [tag.get("term", "") for tag in entry.get("tags", [])],
         }
         if not is_sponsored(item):
@@ -193,6 +205,42 @@ def get_upcoming(days: int = 7, limit: int = 10) -> dict:
             upcoming.append(story)
 
     return {"items": upcoming[:limit], "failed_feeds": news_failed + work_failed}
+
+
+@mcp.tool()
+def get_dev_updates(days: int = 3, limit: int = 20) -> dict:
+    """Get new AI tools, releases, and techniques for software engineers
+    (The New Stack, GitHub Blog).
+
+    Use this for "The Builder's Bar": developer tools, coding agents, evals,
+    benchmarks, and AI infrastructure news.
+
+    Args:
+        days: How many days back to look (1-14).
+        limit: Max number of stories to return (1-30).
+    """
+    days = max(1, min(days, 14))
+    limit = max(1, min(limit, 30))
+    stories, failed_feeds = collect_stories("builder", days)
+    return {"stories": stories[:limit], "failed_feeds": failed_feeds}
+
+
+@mcp.tool()
+def get_long_reads(days: int = 14, limit: int = 10) -> dict:
+    """Get recent essays from respected AI newsletters, mostly on Substack
+    (The Pragmatic Engineer, Interconnects, Import AI, One Useful Thing, and more).
+
+    Use this for the weekly "Long Read" pick. These are opinion and analysis
+    pieces: attribute claims to the author ("X argues..."), never state them as fact.
+
+    Args:
+        days: How many days back to look (1-30). Newsletters post weekly, so default is 14.
+        limit: Max number of essays to return (1-30).
+    """
+    days = max(1, min(days, 30))
+    limit = max(1, min(limit, 30))
+    stories, failed_feeds = collect_stories("longread", days)
+    return {"stories": stories[:limit], "failed_feeds": failed_feeds}
 
 
 if __name__ == "__main__":

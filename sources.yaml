@@ -23,3 +23,47 @@ feeds:
     url: https://www.salesforce.com/news/feed/
     section: work
     ai_filter: true
+
+  # Builder's Bar: new AI tools and techniques for engineers
+  - name: The New Stack
+    url: https://thenewstack.io/feed/
+    section: builder
+    ai_filter: true
+  - name: GitHub Blog
+    url: https://github.blog/feed/
+    section: builder
+    ai_filter: true
+
+  # Long Read: weekly AI newsletters (mostly Substack). Opinion pieces, so attribute them
+  - name: The Pragmatic Engineer
+    url: https://newsletter.pragmaticengineer.com/feed
+    section: longread
+    ai_filter: true
+  - name: ChinaTalk
+    url: https://www.chinatalk.media/feed
+    section: longread
+    ai_filter: true
+  - name: Ben's Bites
+    url: https://www.bensbites.com/feed
+    section: longread
+  - name: Interconnects
+    url: https://www.interconnects.ai/feed
+    section: longread
+  - name: The Algorithmic Bridge
+    url: https://www.thealgorithmicbridge.com/feed
+    section: longread
+  - name: AI as Normal Technology
+    url: https://www.normaltech.ai/feed
+    section: longread
+  - name: Import AI
+    url: https://importai.substack.com/feed
+    section: longread
+  - name: Last Week in AI
+    url: https://lastweekin.ai/feed
+    section: longread
+  - name: One Useful Thing
+    url: https://www.oneusefulthing.org/feed
+    section: longread
+  - name: Ahead of AI
+    url: https://magazine.sebastianraschka.com/feed
+    section: longread

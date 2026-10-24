@@ -1,0 +1,228 @@
+{#- The AI Brew daily email. Inline styles and tables only: email apps strip <style> and JS. -#}
+{%- set gold = "#B39060" -%}
+{%- set ink = "#2E2620" -%}
+{%- set soft = "#4A3F36" -%}
+{%- set muted = "#9A8B7A" -%}
+{%- set taupe = "#7D6E60" -%}
+{%- set line = "#E2D6C3" -%}
+{%- set serif = "Georgia,'Times New Roman',serif" -%}
+
+{%- macro read_more(story, label="Read more", color=ink) -%}
+<div style="margin-top:8px;font-size:12px;letter-spacing:1px;"><a href="{{ story.link }}" style="color:{{ color }};text-decoration:none;border-bottom:1px solid {{ gold }};text-transform:uppercase;">{{ label }}</a> <span style="color:{{ muted }};">&nbsp;{{ story.source }}</span></div>
+{%- endmacro -%}
+
+{%- macro section_title(name, subtitle) -%}
+<div style="text-align:center;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:{{ gold }};">&mdash; {{ name }} &mdash;</div>
+<div style="text-align:center;font-family:{{ serif }};font-style:italic;font-size:13px;color:{{ muted }};">{{ subtitle }}</div>
+{%- endmacro -%}
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The AI Brew — {{ issue.date_long }}</title>
+</head>
+<body style="margin:0;padding:0;background:#EDE6DC;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EDE6DC;">
+<tr><td align="center" style="padding:28px 10px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FBF8F3;border:1px solid {{ line }};font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:16px;line-height:1.65;color:{{ ink }};">
+
+  {#- Nameplate #}
+  <tr><td style="padding:34px 34px 0;text-align:center;">
+    <div style="display:inline-block;width:46px;height:46px;line-height:46px;border:1px solid {{ gold }};border-radius:50%;font-family:{{ serif }};font-style:italic;font-size:18px;color:{{ gold }};">AB</div>
+    <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:{{ muted }};margin-top:14px;">The Morning Edition</div>
+    <div style="font-family:{{ serif }};font-size:48px;letter-spacing:1px;line-height:1.1;padding:10px 0 4px;">The AI Brew</div>
+    <div style="font-family:{{ serif }};font-style:italic;font-size:15px;color:{{ taupe }};">AI news, slow-poured and easy to sip</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;border-top:1px solid {{ gold }};border-bottom:1px solid {{ gold }};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:{{ taupe }};">
+      <tr><td style="padding:8px 0;" align="left">No. {{ issue.number }}</td><td align="center">{{ issue.date_long }}</td><td align="right">{{ issue.read_minutes }} min read</td></tr>
+    </table>
+    {%- if issue.web_url %}
+    <div style="margin-top:10px;font-size:12px;"><a href="{{ issue.web_url }}" style="color:{{ taupe }};">Read the interactive edition online</a></div>
+    {%- endif %}
+  </td></tr>
+
+  {#- Today's menu: built from whichever sections are present #}
+  <tr><td style="padding:26px 34px 0;">
+    <div style="border:1px solid {{ line }};padding:18px 22px;background:#F5EFE6;">
+      <div style="font-family:{{ serif }};font-style:italic;font-size:17px;text-align:center;">~ Today's menu ~</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;font-size:14px;">
+        {%- for name, teaser in issue.menu %}
+        <tr><td style="padding:4px 0;color:{{ gold }};">&#10022;</td><td style="padding:4px 8px;"><b>{{ name }}</b></td><td align="right" style="color:{{ taupe }};">{{ teaser }}</td></tr>
+        {%- endfor %}
+      </table>
+    </div>
+  </td></tr>
+
+  {#- The Big Pour: one lead story + up to two side-by-side #}
+  {%- if issue.big_pour %}
+  {%- set lead = issue.big_pour[0] %}
+  <tr><td style="padding:34px 34px 0;">
+    {{ section_title("The Big Pour", "today's biggest AI news") }}
+    <div style="font-family:{{ serif }};font-size:30px;line-height:1.2;margin-top:18px;text-align:center;">{{ lead.headline }}</div>
+    <div style="width:40px;border-top:1px solid {{ gold }};margin:16px auto;"></div>
+    <p style="margin:0;"><span style="font-family:{{ serif }};font-size:44px;line-height:0.9;float:left;padding:4px 8px 0 0;color:{{ gold }};">{{ lead.summary[0] }}</span>{{ lead.summary[1:] }}</p>
+    {%- if lead.why %}
+    <div style="border-left:2px solid {{ gold }};padding:4px 0 4px 16px;margin-top:16px;font-family:{{ serif }};font-style:italic;font-size:16px;color:{{ soft }};">Why you should care: {{ lead.why }}</div>
+    {%- endif %}
+    {{ read_more(lead, "Read the full story") }}
+
+    {%- if issue.big_pour | length > 1 %}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:28px;border-top:1px solid {{ line }};">
+      <tr>
+        {%- for story in issue.big_pour[1:3] %}
+        <td valign="top" width="50%" style="padding:18px {{ '16px 0 0' if loop.first else '0 0 16px' }};{{ '' if loop.first else 'border-left:1px solid ' ~ line ~ ';' }}">
+          <div style="font-family:{{ serif }};font-size:20px;line-height:1.25;">{{ story.headline }}</div>
+          <p style="margin:8px 0 0;font-size:15px;color:{{ soft }};">{{ story.summary }}</p>
+          {{ read_more(story) }}
+        </td>
+        {%- endfor %}
+      </tr>
+    </table>
+    {%- endif %}
+  </td></tr>
+  <tr><td style="padding:30px 34px 0;text-align:center;color:{{ gold }};font-size:14px;letter-spacing:10px;">&#10022; &#10022; &#10022;</td></tr>
+  {%- endif %}
+
+  {#- Office Blend #}
+  {%- if issue.office_blend %}
+  <tr><td style="padding:24px 34px 0;">
+    {{ section_title("Office Blend", "how real companies use AI at work") }}
+    <div style="background:#EEF0EA;padding:22px 24px;margin-top:18px;">
+      {%- for story in issue.office_blend %}
+      {%- if not loop.first %}<div style="border-top:1px solid #D5DACD;margin:18px 0;"></div>{% endif %}
+      <div style="font-family:{{ serif }};font-size:21px;">{{ story.headline }}</div>
+      <p style="margin:8px 0 0;font-size:15px;color:{{ soft }};">{{ story.summary }}</p>
+      {{ read_more(story) }}
+      {%- endfor %}
+    </div>
+  </td></tr>
+  {%- endif %}
+
+  {#- Still Roasting: date shown only if the source stated one #}
+  {%- if issue.still_roasting %}
+  <tr><td style="padding:34px 34px 0;">
+    {{ section_title("Still Roasting", "coming soon, worth watching") }}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;font-size:15px;">
+      {%- for item in issue.still_roasting %}
+      <tr><td valign="top" style="padding:10px 12px 10px 0;color:{{ gold }};font-family:{{ serif }};font-size:20px;">{{ ["i.", "ii.", "iii.", "iv."][loop.index0] }}</td>
+        <td style="padding:10px 0;{{ '' if loop.last else 'border-bottom:1px solid ' ~ line ~ ';' }}">{{ item.summary }} <i style="color:{{ muted }};">{{ item.date_mentioned or "Date not announced." }}</i> <a href="{{ item.link }}" style="color:{{ ink }};border-bottom:1px solid {{ gold }};text-decoration:none;">Link</a></td></tr>
+      {%- endfor %}
+    </table>
+  </td></tr>
+  {%- endif %}
+
+  {#- Quick Sips #}
+  {%- if issue.quick_sips %}
+  <tr><td style="padding:34px 34px 0;">
+    {{ section_title("Quick Sips", "more AI news, one line each") }}
+    <div style="background:#F3E9E4;padding:16px 22px;margin-top:16px;font-size:15px;">
+      {%- for sip in issue.quick_sips %}
+      <p style="margin:8px 0;"><span style="color:{{ gold }};">&#10022;</span>&nbsp; {{ sip.summary }} <a href="{{ sip.link }}" style="color:{{ taupe }};">{{ sip.source }}</a></p>
+      {%- endfor %}
+    </div>
+  </td></tr>
+  {%- endif %}
+
+  {#- The Builder's Bar: the one dark card, for engineers #}
+  {%- if issue.builder %}
+  <tr><td style="padding:34px 34px 0;">
+    {{ section_title("The Builder's Bar", "new AI tools & ideas for engineers") }}
+    <div style="background:{{ ink }};color:#F5EFE6;padding:24px 24px 22px;margin-top:16px;">
+      {%- for story in issue.builder.stories %}
+      {%- if not loop.first %}<div style="border-top:1px solid {{ soft }};margin:18px 0;"></div>{% endif %}
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A978;">{{ story.label }}</div>
+      <div style="font-family:{{ serif }};font-size:20px;margin-top:4px;">{{ story.headline }}</div>
+      <p style="margin:6px 0 0;font-size:15px;color:{{ line }};">{{ story.summary }}</p>
+      {{ read_more(story, color="#F5EFE6") }}
+      {%- endfor %}
+      {%- if issue.builder.concept %}
+      {%- set c = issue.builder.concept %}
+      <div style="border:1px solid #C9A978;padding:14px 16px;margin-top:20px;">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A978;">Concept to know</div>
+        <div style="font-family:{{ serif }};font-size:19px;margin-top:4px;">{{ c.term }}</div>
+        <p style="margin:4px 0 0;font-size:14px;color:{{ line }};">{{ c.explanation }}{% if c.link %} <a href="{{ c.link }}" style="color:#F5EFE6;">Source</a>{% endif %}</p>
+      </div>
+      {%- endif %}
+    </div>
+  </td></tr>
+  {%- endif %}
+
+  {#- Long Read: an opinion piece, so the author is named #}
+  {%- if issue.long_read %}
+  {%- set lr = issue.long_read %}
+  <tr><td style="padding:34px 34px 0;">
+    {{ section_title("The Long Read", "one essay worth your second cup") }}
+    <div style="border:1px solid {{ line }};padding:22px 24px;margin-top:16px;text-align:center;">
+      <div style="font-family:{{ serif }};font-size:22px;line-height:1.3;">{{ lr.headline }}</div>
+      <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:{{ muted }};margin-top:6px;">from {{ lr.source }}</div>
+      <p style="margin:10px 0 0;font-family:{{ serif }};font-style:italic;font-size:15px;color:{{ soft }};">{{ lr.summary }}</p>
+      <div style="margin-top:12px;font-size:12px;letter-spacing:1px;"><a href="{{ lr.link }}" style="color:{{ ink }};text-decoration:none;border-bottom:1px solid {{ gold }};text-transform:uppercase;">Read the essay</a></div>
+    </div>
+  </td></tr>
+  {%- endif %}
+
+  {#- Word of the Day + Keep Brewing #}
+  {%- if issue.word or issue.keep_brewing %}
+  <tr><td style="padding:34px 34px 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        {%- if issue.word %}
+        {%- set w = issue.word %}
+        <td valign="top" width="50%" style="border:1px solid {{ line }};padding:20px 18px;text-align:center;">
+          <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:{{ gold }};">Word of the Day</div>
+          <div style="font-family:{{ serif }};font-size:30px;margin-top:8px;">{{ w.term }}</div>
+          <div style="font-family:{{ serif }};font-style:italic;font-size:12px;color:{{ muted }};">{{ w.theme }}, {{ w.day }} of 5</div>
+          <div style="width:30px;border-top:1px solid {{ gold }};margin:12px auto;"></div>
+          <p style="margin:0;font-size:14px;">{{ w.definition }}</p>
+          <p style="margin:8px 0 0;font-size:14px;font-family:{{ serif }};font-style:italic;color:{{ soft }};">{{ w.analogy }}</p>
+        </td>
+        {%- endif %}
+        {%- if issue.word and issue.keep_brewing %}<td width="14"></td>{% endif %}
+        {%- if issue.keep_brewing %}
+        {%- set kb = issue.keep_brewing %}
+        <td valign="top" width="50%" style="background:#F5EFE6;padding:20px 18px;text-align:center;">
+          <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:{{ gold }};">Keep Brewing</div>
+          <div style="font-family:{{ serif }};font-style:italic;font-size:12px;color:{{ muted }};margin-top:4px;">one way to stay up to date</div>
+          <div style="font-family:{{ serif }};font-size:20px;margin-top:10px;">{{ kb.name }}</div>
+          <p style="margin:8px 0 0;font-size:14px;">{{ kb.description }}</p>
+          <div style="margin-top:10px;font-size:12px;letter-spacing:1px;"><a href="{{ kb.link }}" style="color:{{ ink }};text-decoration:none;border-bottom:1px solid {{ gold }};text-transform:uppercase;">Start here</a></div>
+        </td>
+        {%- endif %}
+      </tr>
+    </table>
+  </td></tr>
+  {%- endif %}
+
+  {#- Tip Jar Poll: buttons open a reply that is already filled in #}
+  {%- if issue.poll %}
+  {%- set p = issue.poll %}
+  <tr><td style="padding:34px 34px 0;">
+    <div style="border-top:1px solid {{ gold }};border-bottom:1px solid {{ gold }};padding:22px 10px;text-align:center;">
+      <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:{{ gold }};">The Tip Jar Poll</div>
+      {%- if p.last_results %}
+      <div style="font-family:{{ serif }};font-style:italic;font-size:14px;color:{{ soft }};margin-top:8px;">Last time: {{ p.last_results }}</div>
+      {%- endif %}
+      <div style="font-family:{{ serif }};font-size:22px;margin-top:8px;">{{ p.question }}</div>
+      <div style="margin-top:14px;">
+        {%- for answer in ["YES", "NO"] %}
+        <a href="mailto:{{ issue.reply_to }}?subject={{ ('Poll ' ~ issue.date_iso ~ ': ' ~ answer) | urlencode }}" style="display:inline-block;border:1px solid {{ ink }};padding:6px 22px;font-size:12px;letter-spacing:2px;margin:4px;color:{{ ink }};text-decoration:none;">{{ answer }}</a>
+        {%- endfor %}
+      </div>
+      <div style="margin-top:10px;font-family:{{ serif }};font-style:italic;font-size:13px;color:{{ muted }};">tap to vote &middot; results in the next cup</div>
+    </div>
+  </td></tr>
+  {%- endif %}
+
+  {#- Sign-off + footer #}
+  <tr><td style="padding:28px 34px 34px;text-align:center;">
+    <div style="font-family:{{ serif }};font-style:italic;font-size:17px;color:{{ soft }};">{{ issue.sign_off }}</div>
+    <div style="color:{{ gold }};font-size:14px;letter-spacing:10px;margin-top:14px;">&#10022; &#10022; &#10022;</div>
+    <p style="margin:16px 0 0;font-size:12px;color:{{ muted }};line-height:1.6;">Brewed by an AI agent from trusted news sites. Every story links to its source.<br>Forwarded to you? <a href="{{ issue.subscribe_url }}" style="color:{{ taupe }};">Get your own cup</a> &middot; <a href="{{ issue.unsubscribe_url }}" style="color:{{ taupe }};">Unsubscribe</a></p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,130 @@
+{
+  "number": 1,
+  "date_iso": "2026-10-24",
+  "date_long": "Saturday · 24 October 2026",
+  "read_minutes": 3,
+  "reply_to": "you@example.com",
+  "subscribe_url": "#",
+  "unsubscribe_url": "#",
+  "sign_off": "That's the last sip. Same table, Monday morning.",
+
+  "big_pour": [
+    {
+      "headline": "Block built a voice AI that sounds eerily human",
+      "teaser": "a voice AI that sounds human",
+      "summary": "Jack Dorsey's company Block announced Dessa, an AI voice model trained \"from scratch on nothing but human conversation.\" Block says it can run on a MacBook.",
+      "why": "AI voices that sound like real people are getting small enough to run on a laptop.",
+      "link": "https://techcrunch.com/2026/10/24/blocks-new-voice-model-sounds-eerily-human/",
+      "source": "TechCrunch & The Verge"
+    },
+    {
+      "headline": "OpenAI stops training on the live internet",
+      "summary": "OpenAI says it will cut its newest models off from the internet while training, citing \"significant risks.\"",
+      "link": "https://techcrunch.com/2026/10/23/openai-says-it-will-no-longer-train-its-ai-models-on-the-live-internet-citing-significant-risks/",
+      "source": "TechCrunch"
+    },
+    {
+      "headline": "Your Gmail may help Google target ads",
+      "summary": "Turning on Google's \"Personal Intelligence\" feature gives it more data for ad targeting.",
+      "link": "https://arstechnica.com/gadgets/2026/10/updated-google-privacy-policy-says-your-gmail-might-be-used-for-advertising/",
+      "source": "Ars Technica"
+    }
+  ],
+
+  "office_blend": [
+    {
+      "headline": "Bayer's crop scientists can now just ask",
+      "teaser": "Bayer's scientists just ask",
+      "summary": "Bayer Crop Science built a team of AI helpers that lets its breeders, analysts, and researchers ask questions in everyday language.",
+      "link": "https://aws.amazon.com/blogs/machine-learning/how-bayer-crop-science-built-an-agentic-decision-engine-on-amazon-bedrock-agentcore-with-aws-unified-operations/",
+      "source": "AWS Machine Learning Blog"
+    },
+    {
+      "headline": "SAP certifications, now with AI roleplay",
+      "summary": "SAP professionals can renew their certifications by practising with AI-based roleplays.",
+      "link": "https://www.cio.com/article/4239657/sap-lets-ai-play-key-role-in-its-certification-renewal-process.html",
+      "source": "CIO.com"
+    }
+  ],
+
+  "still_roasting": [
+    {
+      "summary": "Claude Duet, Anthropic's new AI helper app, has a waitlist for paid users.",
+      "date_mentioned": null,
+      "link": "https://techcrunch.com/2026/10/22/claude-duet-app-is-anthropics-bet-on-agents/"
+    },
+    {
+      "summary": "Nirva's $249 AI pendant, which listens only to you, ships by the end of the year.",
+      "date_mentioned": "By end of year.",
+      "link": "https://techcrunch.com/2026/10/22/nirva-raises-33m-for-a-pendant-that-only-listens-to-you/"
+    }
+  ],
+
+  "quick_sips": [
+    {
+      "summary": "Canva launched its first AI image model, which plans a design before creating it.",
+      "link": "https://www.theverge.com/ai-artificial-intelligence/1017151/canva-craft-in-house-ai-model",
+      "source": "The Verge"
+    },
+    {
+      "summary": "OpenAI is working on a new $30B raise at a $1.25T valuation ahead of an IPO.",
+      "link": "https://techcrunch.com/2026/10/22/openai-working-on-new-30b-raise-at-1-25t-valuation-ahead-of-ipo/",
+      "source": "TechCrunch"
+    },
+    {
+      "summary": "Meta delayed new business terms after publishers worried they'd let it scrape news sites for AI training.",
+      "link": "https://www.theverge.com/tech/1017450/meta-business-terms-delayed-ai-scraping",
+      "source": "The Verge"
+    }
+  ],
+
+  "builder": {
+    "stories": [
+      {
+        "label": "New tool",
+        "headline": "AWS Continuum hunts bugs in your repos",
+        "summary": "AWS made Continuum generally available. It finds and validates code vulnerabilities in your repositories. AWS says it fixes 89% of bugs, but The New Stack says there's a catch.",
+        "link": "https://thenewstack.io/aws-says-its-ai-security-agent-fixes-89-of-bugs-but-theres-a-catch/",
+        "source": "The New Stack"
+      },
+      {
+        "label": "Open standard",
+        "headline": "OpenAI gives away its LLM API spec",
+        "summary": "OpenAI is donating Open Responses, its specification for a common LLM API, to the open source Agentic AI Foundation.",
+        "link": "https://thenewstack.io/openai-donates-open-responses/",
+        "source": "The New Stack"
+      }
+    ],
+    "concept": {
+      "term": "Agent harness",
+      "explanation": "The code wrapped around an AI model that turns it into an agent: its tools, its memory, and the loop that runs it. It's in the news twice this week: Ramp built its own in six weeks, and five harnesses were put through the same memory test.",
+      "link": "https://thenewstack.io/ramp-laminar-agent-harness/"
+    }
+  },
+
+  "long_read": {
+    "headline": "What's the ROI of software engineers' spending on AI?",
+    "summary": "AI spending is way up at most companies this year. The Pragmatic Engineer looks at data from 27 companies to ask whether it has changed shipping velocity and PR output.",
+    "link": "https://newsletter.pragmaticengineer.com/p/whats-the-roi-of-software-engineers",
+    "source": "The Pragmatic Engineer"
+  },
+
+  "word": {
+    "term": "token",
+    "theme": "How AI works",
+    "day": 2,
+    "definition": "A small piece of text an AI reads, often part of a word.",
+    "analogy": "Like coffee beans: AI grinds your sentence into little bits before it brews an answer."
+  },
+
+  "keep_brewing": {
+    "name": "Elements of AI",
+    "description": "A free beginner course, no coding or maths needed. One short chapter with your morning coffee.",
+    "link": "https://www.elementsofai.com/"
+  },
+
+  "poll": {
+    "question": "Would you let an AI book your next trip?",
+    "last_results": null
+  }
+}
